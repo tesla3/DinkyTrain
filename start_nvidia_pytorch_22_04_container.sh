@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# for preparing host to run nvidia docker, see academic-budge-bert/setup_host_to_run_nvidia_container.md
+
+
 sudo docker run \
     -it --rm \
     -v /home/hua/DinkyTrain/:/DinkyTrain \

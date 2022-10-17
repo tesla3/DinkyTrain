@@ -2,9 +2,11 @@
 
 # create a new conda env with python 3.9
 
-# install pytorch (cuda 11.6)
+# install pytorch 1.12.1 with cuda 11.6
 
 # install DinkyTrain from source
+
+
 <<\c
 git clone https://github.com/princeton-nlp/DinkyTrain.git
 cd DinkyTrain
