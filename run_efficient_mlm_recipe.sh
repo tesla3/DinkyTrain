@@ -17,17 +17,30 @@ MASK_RATE=0.4             # Masking rate
 SAME_RATE=0               # Replace with same tokens
 RANDOM_RATE=0             # Replace with random tokens
 TOTAL_UPDATES=23000       # Total number of training steps (~3 epochs with Wikipedia+BookCorpus)
+# add to have a short run
+MAX_UPDATES=6000
 WARMUP_UPDATES=1380       # Warmup the learning rate over this many updates (6%)
 TOKENS_PER_SAMPLE=128     # Max sequence length
-MAX_SENTENCES=8           # Number of sequences per GPU (for RTX2080, 8 is the max)
-ARCH=roberta_large        # Model architecture
-JOB_NAME=efficient_roberta_large_bsz4096_lr2e-3_mask0.4 
+
+## my setup for roberta_base
+MAX_SENTENCES=128           # Number of sequences per GPU (for RTX2080, 8 is the max)
+ARCH=roberta_base        # Model architecture
+JOB_NAME=efficient_roberta_base_bsz4096_lr2e-3_mask0.4 
+
+### original set up for roberta large
+#MAX_SENTENCES=8           # Number of sequences per GPU (for RTX2080, 8 is the max)
+#ARCH=roberta_large        # Model architecture
+#JOB_NAME=efficient_roberta_large_bsz4096_lr2e-3_mask0.4 
+
 ####### Hyperparameter ########
 
 WANDB_PROJECT=$JOB_NAME                          # Weight and Bias
 MAX_POSITIONS=512                                # Num. positional embeddings 
 UPDATE_FREQ=$(expr $BSZ / $MAX_SENTENCES / $GPU) # Gradient accumulation
-SAVE_INTERVAL_UPDATES=5000                  
+#SAVE_INTERVAL_UPDATES=5000                  
+
+# save more often so that I can kill it any time and resume late
+SAVE_INTERVAL_UPDATES=300                  
 
 EXTRA_ARGS=""
 if [ "$DEEPSPEED" = "1" ]
@@ -62,7 +75,7 @@ fairseq-train  $DATA_DIR \
     \
     --warmup-updates $WARMUP_UPDATES \
     --total-num-update $TOTAL_UPDATES \
-    --max-update $TOTAL_UPDATES \
+    --max-update $MAX_UPDATES \
     \
     --dropout 0.1 --attention-dropout 0.1 --weight-decay 0.01 \
     \
